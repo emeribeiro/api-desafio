@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.framework_digital.desafio_tecnico.dto.PostDTO;
+import br.com.framework_digital.desafio_tecnico.dto.PostDetalheDTO;
 import br.com.framework_digital.desafio_tecnico.modelo.Post;
 import br.com.framework_digital.desafio_tecnico.service.PostService;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/post")
 public class PostController {
 	
@@ -41,7 +44,7 @@ public class PostController {
 			@RequestParam(value = "titulo", required = false) String titulo, 
 			@RequestParam(value = "link", required = false) String link, 
 			@RequestParam(value = "texto", required = false) String texto, 
-			@RequestParam(value = "file",required = false) MultipartFile file) throws IOException {
+			@RequestParam(value = "files",required = false) MultipartFile file) throws IOException {
 		Post post = postService.getPostForm(titulo, link, texto, file);
 		postService.criarPost(post);
 		
@@ -50,10 +53,10 @@ public class PostController {
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<PostDTO> buscarPost(@PathVariable Long id) throws Exception {
+	public ResponseEntity<PostDetalheDTO> buscarPost(@PathVariable Long id) throws Exception {
 		Optional<Post> post = postService.buscarPorId(id);
 		if (post.isPresent()) {
-			return ResponseEntity.ok(new PostDTO(post.get()));
+			return ResponseEntity.ok(postService.detalhar(post.get()));
 		}
 		return ResponseEntity.notFound().build();
 	}

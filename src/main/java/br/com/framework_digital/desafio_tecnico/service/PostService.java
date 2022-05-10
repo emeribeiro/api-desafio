@@ -10,8 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.framework_digital.desafio_tecnico.config.security.UsuarioLogado;
 import br.com.framework_digital.desafio_tecnico.dto.PostDTO;
+import br.com.framework_digital.desafio_tecnico.dto.PostDetalheDTO;
+import br.com.framework_digital.desafio_tecnico.modelo.Comentario;
 import br.com.framework_digital.desafio_tecnico.modelo.Post;
 import br.com.framework_digital.desafio_tecnico.modelo.Usuario;
+import br.com.framework_digital.desafio_tecnico.repository.ComentarioRepository;
 import br.com.framework_digital.desafio_tecnico.repository.PostRepository;
 import br.com.framework_digital.desafio_tecnico.repository.UsuarioRepository;
 
@@ -23,6 +26,9 @@ public class PostService {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private ComentarioRepository comentarioRepository;
 
 	public List<PostDTO> listaPosts() {
 		List<Post> posts = postRepository.findAll();
@@ -32,7 +38,7 @@ public class PostService {
 	public Optional<Post> buscarPorId(Long id) {
 		return postRepository.findById(id);
 	}
-
+	
 	public void deletarPorId(Long id, Optional<Post> post) throws Exception {
 		Usuario usuario = usuarioRepository.findByUsername(UsuarioLogado.usuarioLogado()).get();
 		if(post.get().getUsuario().getId().equals(usuario.getId()))
@@ -53,6 +59,11 @@ public class PostService {
 		post.setTitulo(titulo);
 		post.setImagem(file.getBytes());
 		return post;
+	}
+
+	public PostDetalheDTO detalhar(Post post) {
+		List<Comentario> coment = comentarioRepository.findByPost(post);
+		return new PostDetalheDTO(post, coment);
 	}
 
 

@@ -11,5 +11,6 @@ public class TokenDTO {
 	
 	private String token;
 	private String tipo;
+	private String usuario;
 
 }
