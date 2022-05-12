@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.framework_digital.desafio_tecnico.config.security.UsuarioLogado;
 import br.com.framework_digital.desafio_tecnico.dto.AlbumDTO;
+import br.com.framework_digital.desafio_tecnico.dto.AlbumDetalheDTO;
 import br.com.framework_digital.desafio_tecnico.modelo.Album;
 import br.com.framework_digital.desafio_tecnico.modelo.Imagem;
 import br.com.framework_digital.desafio_tecnico.modelo.Usuario;
@@ -63,6 +64,10 @@ public class AlbumService {
 		} else {
 			 throw new Exception();
 		}
+	}
+
+	public AlbumDetalheDTO detalhar(Album album) {
+		return new AlbumDetalheDTO(album);
 	}
 	
 }

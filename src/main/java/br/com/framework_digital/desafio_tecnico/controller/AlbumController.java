@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.framework_digital.desafio_tecnico.dto.AlbumDTO;
+import br.com.framework_digital.desafio_tecnico.dto.AlbumDetalheDTO;
 import br.com.framework_digital.desafio_tecnico.modelo.Album;
 import br.com.framework_digital.desafio_tecnico.service.AlbumService;
 
@@ -50,11 +51,11 @@ public class AlbumController {
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<AlbumDTO> buscarAlbum(@PathVariable Long id) throws Exception {
+	public ResponseEntity<AlbumDetalheDTO> buscarAlbum(@PathVariable Long id) throws Exception {
 		Optional<Album> album = albumService.buscarPorId(id);
-		if (album.isPresent()) {
-			return ResponseEntity.ok(new AlbumDTO(album.get()));
-		}
+		if (album.isPresent())
+			return ResponseEntity.ok(albumService.detalhar(album.get()));
+		
 		return ResponseEntity.notFound().build();
 	}
 	

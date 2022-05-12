@@ -28,12 +28,12 @@ public class PostDetalheDTO {
 		this.link = post.getLink();
 		this.texto = post.getTexto();
 		this.imagem = post.getImagem();
-		this.usuario = post.getUsuario().getUsername();
+		this.usuario = post.getUsuario() != null ? post.getUsuario().getUsername() : null;
 		this.comentarios = coment.stream().map(comentario -> {
 			ComentarioDTO dto = new ComentarioDTO();
 				dto.setTexto(comentario.getTexto());
 				dto.setId(comentario.getId());
-				dto.setUsuario(comentario.getUsuario().getUsername());
+				dto.setUsuario(comentario.getUsuario() != null ? comentario.getUsuario().getUsername() : null);
 				return dto;
 			}).collect(Collectors.toList());
 	}
