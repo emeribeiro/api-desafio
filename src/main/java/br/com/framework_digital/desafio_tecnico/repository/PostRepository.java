@@ -12,4 +12,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	
 	List<Post> findAll();
 
+	List<Post> findByTextoContainingAndLinkContaining(String texto, String link);
+
+	List<Post> findByTextoContaining(String texto);
+
 }

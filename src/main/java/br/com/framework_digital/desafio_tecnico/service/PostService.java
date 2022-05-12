@@ -3,6 +3,7 @@ package br.com.framework_digital.desafio_tecnico.service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,21 @@ public class PostService {
 	public PostDetalheDTO detalhar(Post post) {
 		List<Comentario> coment = comentarioRepository.findByPost(post);
 		return new PostDetalheDTO(post, coment);
+	}
+
+	public List<PostDetalheDTO> listarPostPorTextoOuLink(String filtro) {
+		return postRepository.findByTextoContaining(filtro)
+				.stream()
+				.map(post -> {
+					PostDetalheDTO dto = new PostDetalheDTO();
+					dto.setId(post.getId());
+					dto.setUsuario(post.getUsuario() != null ? post.getUsuario().getUsername() : null);
+					dto.setImagem(post.getImagem());
+					dto.setLink(post.getLink());
+					dto.setTexto(post.getTexto());
+					dto.setTitulo(post.getTitulo());
+					return dto;
+				}).collect(Collectors.toList());
 	}
 
 
